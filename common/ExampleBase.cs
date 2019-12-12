@@ -37,7 +37,7 @@ namespace eg_01_csharp_jwt
             }
         }
 
-        private void UpdateToken()
+        public void UpdateToken()
         {
             OAuth.OAuthToken authToken = ApiClient.RequestJWTUserToken(DSConfig.ClientID,
                             DSConfig.ImpersonatedUserGuid,
@@ -55,7 +55,7 @@ namespace eg_01_csharp_jwt
             expiresIn = DateTime.Now.Second + authToken.expires_in.Value;
         }
 
-        private Account GetAccountInfo(OAuth.OAuthToken authToken)
+        public Account GetAccountInfo(OAuth.OAuthToken authToken)
         {
             ApiClient.SetOAuthBasePath(DSConfig.AuthServer);
             OAuth.UserInfo userInfo = ApiClient.GetUserInfo(authToken.access_token);

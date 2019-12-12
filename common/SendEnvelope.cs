@@ -4,6 +4,10 @@ using DocuSign.eSign.Client;
 using DocuSign.eSign.Model;
 using System.Text;
 using System.Collections.Generic;
+using System.IO;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using DocuSign.eSign.Client.Auth;
 
 namespace eg_01_csharp_jwt
 {
@@ -64,6 +68,7 @@ namespace eg_01_csharp_jwt
             EnvelopeDefinition envelope = this.CreateEvelope();
             EnvelopesApi envelopeApi = new EnvelopesApi(ApiClient.Configuration);
             EnvelopeSummary results = envelopeApi.CreateEnvelope(AccountID, envelope);
+            
             return results;
         }
         /// <summary>
@@ -72,49 +77,162 @@ namespace eg_01_csharp_jwt
         /// <returns></returns>
         private EnvelopeDefinition CreateEvelope()
         {
-            EnvelopeDefinition envelopeDefinition = new EnvelopeDefinition
+            //EnvelopeDefinition envelopeDefinition = new EnvelopeDefinition
+            //{
+            //    EmailSubject = "Please sign this document sent from the C# SDK"
+            //};
+
+            string accountId = "9597916";
+            string templateId = "212fcb4c-75b2-41a3-9f40-1056373a5c6e";
+            // Add it to the inlineTemplatesList
+          
+            // Create the definition for the envelope
+            EnvelopeDefinition envDefinition = new EnvelopeDefinition();
+            // Add the Composite Template list
+     
+            envDefinition.EmailSubject = "CompositeTemplate Example";
+            envDefinition.Status = "sent";
+            CarbonCopy cc1 = new CarbonCopy
             {
-                EmailSubject = "Please sign this document sent from the C# SDK"
+                Email = "RafiBerger613@gmail.com",
+                Name = "Rafael Berger",
+                RecipientId = "2",
+                RoutingOrder = "2"
+            };
+            string signerEmail = "berger.aaronl@gmail.com";
+            Signer signer1 = new Signer
+            {
+                Email = signerEmail,
+                Name = "Aaron Berger",
+                RecipientId = "1",
+                RoutingOrder = "1"
+            };
+            Signer signer2 = new Signer
+            {
+                Email = "shaniberger12@gmail.com",
+                Name = "Shani Berger",
+                RecipientId = "1",
+                RoutingOrder = "1"
+            };
+            SignHere signHere1 = new SignHere
+            {
+                AnchorString = "**signature_1**",
+                AnchorUnits = "pixels",
+                AnchorYOffset = "10",
+                AnchorXOffset = "20"
             };
 
-            Document doc1 = CreateDocumentFromTemplate("1", "Order acknowledgement", "html",
-                    Encoding.UTF8.GetBytes(ENVELOPE_1_DOCUMENT_1));
-            Document doc2 = CreateDocumentFromTemplate("2", "Battle Plan", "docx",
-                    DSHelper.ReadContent(DOC_2_DOCX));
-            Document doc3 = CreateDocumentFromTemplate("3", "Lorem Ipsum", "pdf",
-                    DSHelper.ReadContent(DOC_3_PDF));
+            SignHere signHere2 = new SignHere
+            {
+                AnchorString = "/sn1/",
+                AnchorUnits = "pixels",
+                AnchorYOffset = "10",
+                AnchorXOffset = "20"
+            };
 
-            // The order in the docs array determines the order in the envelope
-            envelopeDefinition.Documents = new List<Document>() { doc1, doc2, doc3 };
-            // create a signer recipient to sign the document, identified by name and email
-            // We're setting the parameters via the object creation
-            Signer signer1 = CreateSigner();
-            // routingOrder (lower means earlier) determines the order of deliveries
-            // to the recipients. Parallel routing order is supported by using the
-            // same integer as the order for two or more recipients.
-
-            // create a cc recipient to receive a copy of the documents, identified by name and email
-            // We're setting the parameters via setters
-            CarbonCopy cc1 = CreateCarbonCopy();
-            // Create signHere fields (also known as tabs) on the documents,
-            // We're using anchor (autoPlace) positioning
-            //
-            // The DocuSign platform seaches throughout your envelope's
-            // documents for matching anchor strings. So the
-            // sign_here_2 tab will be used in both document 2 and 3 since they
-            // use the same anchor string for their "signer 1" tabs.
-            SignHere signHere1 = CreateSignHere("**signature_1**", "pixels", "20", "10");
-            SignHere signHere2 = CreateSignHere("/sn1/", "pixels", "20", "10");
             // Tabs are set per recipient / signer
-            SetSignerTabs(signer1, signHere1, signHere2);
-            // Add the recipients to the envelope object
-            Recipients recipients = CreateRecipients(signer1, cc1);
-            envelopeDefinition.Recipients = recipients;
-            // Request that the envelope be sent by setting |status| to "sent".
-            // To request that the envelope be created as a draft, set to "created"
-            envelopeDefinition.Status = "sent";
+            Tabs signer1Tabs = new Tabs
+            {
+                SignHereTabs = new List<SignHere> { signHere1, signHere2 }
+            };
+            signer1.Tabs = signer1Tabs;
 
-            return envelopeDefinition;
+            // Add the recipients to the envelope object
+            Recipients recipients = new Recipients
+            {
+                Signers = new List<Signer> { signer1, signer2 },
+                CarbonCopies = new List<CarbonCopy> { cc1 }
+            };
+
+            EnvelopeDefinition envDef = new EnvelopeDefinition();
+            envDef.EmailSubject = "[DocuSign C# SDK] - Please sign this doc";
+
+            envDef.TemplateId = templateId;
+            TemplateRole tRole = new TemplateRole();
+            tRole.Email = "rberger@weitzlux.com";
+            tRole.Name = "R Berger";
+            tRole.RoleName = "signer";
+            List<Text> tabsTextList = new List<Text>();
+            List<Number> tabsNumberList = new List<Number>();
+
+            tRole.Tabs = new Tabs();
+            tRole.Tabs.TextTabs = new List<Text>();
+            Text textTab = new Text();
+            textTab.TabLabel = "NameTest";
+            textTab.Value = "R Berger";
+            //textTab.Shared = "true";
+            //textTab.PageNumber = "1";
+
+
+            // TemplateRole tRole1 = new TemplateRole();
+            // tRole.Email = "shaniberger12@gmail.com";
+            // tRole.Name = "Shani Berger";
+            // tRole.RoleName = "signer2";
+            // List<Text> tabsTextList1 = new List<Text>();
+            // List<Number> tabsNumberList1 = new List<Number>();
+
+            // tRole1.Tabs = new Tabs();
+            // tRole1.Tabs.TextTabs = new List<Text>();
+            // Text textTab1 = new Text();
+            // textTab1.TabLabel = "Name";
+            // textTab1.Value = "Shani Berger";
+            // textTab1.Shared = "true";
+            // textTab1.PageNumber = "2";
+            // // envDef.Recipients.CarbonCopies.Add(cc1);
+
+            textTab.XPosition = "100";
+            textTab.YPosition = "100";
+            // var test = CreateSignHere("/sn1/", "pixels", "20", "10");
+            ////tRole.Tabs.SignHereTabs.Add(CreateSignHere("/sn1/", "pixels", "20", "10"));
+            // tRole.Tabs.SignHereTabs = new List<SignHere>() { test };
+             tRole.Tabs.TextTabs.Add(textTab);
+
+            // TemplateRole tRole2 = new TemplateRole();
+            // tRole2.Email = "Rafiberger613@gmail.com";
+            // tRole2.Name = "rafael Berger";
+            // tRole2.RoleName = "reciever";
+            // List<Text> tabsTextList2 = new List<Text>();
+            // List<Number> tabsNumberList2 = new List<Number>();
+
+            // tRole2.Tabs = new Tabs();
+            // tRole2.Tabs.TextTabs = new List<Text>();
+            // Text textTab2 = new Text();
+            // textTab2.TabLabel = "Name";
+            // textTab2.Value = "Rafael Berger";
+            // textTab2.Shared = "true";
+            // textTab2.PageNumber = "2";
+            List<TemplateRole> rolesList = new List<TemplateRole>() { tRole };
+
+            //add the role to the envelope and assign valid templateId from your account
+
+                envDef.TemplateRoles = rolesList;
+
+            envDef.Status = "sent";
+      
+
+            EnvelopesApi envelopesApi = new EnvelopesApi(ApiClient.Configuration);
+      
+
+            EnvelopesInformation envelopesList = new ListEnvelopes(ApiClient).List(); String filePath = String.Empty;
+            FileStream fs = null;
+            //foreach (var envelope in envelopesList.Envelopes)
+            //{
+            //    EnvelopeDocumentsResult docsList = envelopesApi.ListDocuments(accountId, envelope.EnvelopeId);
+            //    foreach (var document in docsList.EnvelopeDocuments)
+            //    {
+            //        MemoryStream docStream = (MemoryStream)envelopesApi.GetDocument(accountId, envelope.EnvelopeId, document.DocumentId);
+            //        filePath = @"C:\wlcollection\WORKAREA RafaelB\Docusign\Envelopes\" + envelope.EnvelopeId + document.DocumentId +  ".pdf";
+            //        fs = new FileStream(filePath, FileMode.Create);
+            //        docStream.Seek(0, SeekOrigin.Begin);
+            //        docStream.CopyTo(fs);
+            //        fs.Close();
+                  
+
+            //    }
+                
+            //}
+             
+            return envDef;
         }
         /// <summary>
         /// This method creates Recipients instance and populates its signers and carbon copies

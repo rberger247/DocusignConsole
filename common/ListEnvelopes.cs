@@ -25,6 +25,7 @@ namespace eg_01_csharp_jwt
             EnvelopesApi envelopeApi = new EnvelopesApi(ApiClient.Configuration);
 
             ListStatusChangesOptions options = new ListStatusChangesOptions();
+       //     options.status = "sent";
             DateTime date = DateTime.Now.AddDays(-30);
             options.fromDate = date.ToString("yyyy/MM/dd");
 
