@@ -15,8 +15,14 @@ namespace eg_01_csharp_jwt
                 var apiClient = new ApiClient();
 
                 Console.WriteLine("\nSending an envelope with three documents. This takes about 15 seconds...");
-                EnvelopeSummary result = new SendEnvelope(apiClient).Send();
-                Console.WriteLine("\nDone. Envelope status: {0}. Envelope ID: {1}", result.Status, result.EnvelopeId);
+                // EnvelopeSummary result = new SendEnvelope(apiClient).Send();
+                var result = new SendEnvelope(apiClient).Send();
+              
+               
+                //  EnvelopeSummary result = new ApiEnvelope(apiClient).Send();
+
+
+                Console.WriteLine("\nDone. Envelope status: {0}. Envelope ID: {1}", result, result);
 
 
                 //EnvelopeDefinition envDef = new EnvelopeDefinition();

@@ -2,6 +2,7 @@
 using DocuSign.eSign.Api;
 using DocuSign.eSign.Client;
 using DocuSign.eSign.Model;
+using RestSharp;
 using static DocuSign.eSign.Api.EnvelopesApi;
 
 namespace eg_01_csharp_jwt
@@ -9,7 +10,7 @@ namespace eg_01_csharp_jwt
     /// <summary>
     /// This class calls the  List status changes API method.
     /// </summary>
-    internal class ListEnvelopes: ExampleBase
+    internal class ListEnvelopes: AuthToken
     {
         public ListEnvelopes(ApiClient client) : base(client)
         {
@@ -21,14 +22,12 @@ namespace eg_01_csharp_jwt
         internal EnvelopesInformation List()
         {
             CheckToken();
-
             EnvelopesApi envelopeApi = new EnvelopesApi(ApiClient.Configuration);
-
+    
             ListStatusChangesOptions options = new ListStatusChangesOptions();
        //     options.status = "sent";
             DateTime date = DateTime.Now.AddDays(-30);
             options.fromDate = date.ToString("yyyy/MM/dd");
-
             return envelopeApi.ListStatusChanges(AccountID, options);
         }
     }
