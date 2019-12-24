@@ -283,13 +283,10 @@
     <Compile Include="..\common\Program.cs">
       <Link>Program.cs</Link>
     </Compile>
-    <Compile Include="..\common\SendEnvelope.cs">
-      <Link>SendEnvelope.cs</Link>
-    </Compile>
     <Compile Include="ApiEnvelope.cs" />
     <Compile Include="AuthTokens.cs" />
     <Compile Include="JwtEnvelope.cs" />
-    <Compile Include="Envelope.cs" />
+    <Compile Include="Envelopes.cs" />
     <Compile Include="IEnvelope.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

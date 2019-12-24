@@ -1,6 +1,6 @@
-﻿using DocuSign.eSign.Api;
-using DocuSign.eSign.Client;
+﻿using DocuSign.eSign.Client;
 using DocuSign.eSign.Model;
+using jwt_framework;
 using System;
 using System.Collections.Generic;
 
@@ -15,43 +15,12 @@ namespace eg_01_csharp_jwt
                 var apiClient = new ApiClient();
 
                 Console.WriteLine("\nSending an envelope with three documents. This takes about 15 seconds...");
-                // EnvelopeSummary result = new SendEnvelope(apiClient).Send();
-                var result = new SendEnvelope(apiClient).sendenvelope();
-              
-               
-                //  EnvelopeSummary result = new ApiEnvelope(apiClient).Send();
-
-
+                var result = new Envelopes(apiClient).ProcessEnvelopes();
                 Console.WriteLine("\nDone. Envelope status: {0}. Envelope ID: {1}", result, result);
-
-
-                //EnvelopeDefinition envDef = new EnvelopeDefinition();
-                //envDef.EmailSubject = "[DocuSign C# SDK] - Please sign this doc";
-
-                //// assign recipient to template role by setting name, email, and role name.  Note that the
-                //// template role name must match the placeholder role name saved in your account template.  
-                //TemplateRole tRole = new TemplateRole();
-                //tRole.Email = "Rafiberger613@gmail.com";
-                //tRole.Name = "{USER_NAME}";
-                //tRole.RoleName = "{ROLE}";
-
-                //List<TemplateRole> rolesList = new List<TemplateRole>() { tRole };
-
-                //// add the role to the envelope and assign valid templateId from your account
-                //envDef.TemplateRoles = rolesList;
-                //envDef.TemplateId = "294c257f-f19f-4bd0-aefb-37b26ae37806";
-
-                //// set envelope status to "sent" to immediately send the signature request
-                //envDef.Status = "sent";
-                //string accountId = "9597916";
-                //// |EnvelopesApi| contains methods related to creating and sending Envelopes (aka signature requests)
-                //EnvelopesApi envelopesApi = new EnvelopesApi();
-                //EnvelopeSummary envelopeSummary = envelopesApi.CreateEnvelope(accountId, envDef);
 
                 Console.WriteLine("\n\nList the envelopes in the account...");
                 EnvelopesInformation envelopesList = new ListEnvelopes(apiClient).List();
-                List<Envelope> envelopes = envelopesList.Envelopes;
-             //   294c257f - f19f - 4bd0 - aefb - 37b26ae37806
+                List<Envelope> envelopes = envelopesList.Envelopes;       
                 if (envelopesList != null && envelopes.Count > 2)
                 {
                     Console.WriteLine("Results for {0} envelopes were returned. Showing the first two: ", envelopes.Count);

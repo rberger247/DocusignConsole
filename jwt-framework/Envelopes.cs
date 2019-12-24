@@ -17,7 +17,23 @@ namespace jwt_framework
         {
         }
 
-        public EnvelopeDefinition CreateEvelope()
+        public string ProcessEnvelopes()
+        {
+            string response = string.Empty;
+            List<IEnvelope> envelopes = new List<IEnvelope>();
+            ApiEnvelope apiEnvelope = new ApiEnvelope(ApiClient);
+            JwtEnvelope jwtEnvelope = new JwtEnvelope(ApiClient);
+            envelopes.Add(apiEnvelope);
+            envelopes.Add(jwtEnvelope);
+            foreach (var env in envelopes)
+            {
+                var envDef = CreateEvelope();
+                response = env.SendEnvelope(envDef);
+            }
+            return response;
+        }
+
+        private static EnvelopeDefinition CreateEvelope()
         {       
             string templateId = "212fcb4c-75b2-41a3-9f40-1056373a5c6e";
 
@@ -42,6 +58,7 @@ namespace jwt_framework
             envDef.Status = "sent";
             return envDef;
         }
+
 
 
         //EnvelopesApi envelopesApi = new EnvelopesApi(ApiClient.Configuration);
