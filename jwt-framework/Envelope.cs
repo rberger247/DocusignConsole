@@ -12,19 +12,18 @@ using System.Threading.Tasks;
 
 namespace jwt_framework
 {
-   public class SendEnvelopes : AuthToken
+   public class Envelopes : AuthToken
     {
         /// <summary>
         /// This class create and send envelope
         /// </summary>
         /// <param name="apiClient"></param>
-        public SendEnvelopes(ApiClient apiClient) : base(apiClient)
+        public Envelopes(ApiClient apiClient) : base(apiClient)
         {
         }
 
         public EnvelopeDefinition CreateEvelope()
-        {
-            string accountId = "9597916";
+        {       
             string templateId = "212fcb4c-75b2-41a3-9f40-1056373a5c6e";
 
             EnvelopeDefinition envDef = new EnvelopeDefinition();

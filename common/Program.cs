@@ -16,7 +16,7 @@ namespace eg_01_csharp_jwt
 
                 Console.WriteLine("\nSending an envelope with three documents. This takes about 15 seconds...");
                 // EnvelopeSummary result = new SendEnvelope(apiClient).Send();
-                var result = new SendEnvelope(apiClient).Send();
+                var result = new SendEnvelope(apiClient).sendenvelope();
               
                
                 //  EnvelopeSummary result = new ApiEnvelope(apiClient).Send();

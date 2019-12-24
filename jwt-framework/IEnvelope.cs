@@ -2,9 +2,9 @@
 
 namespace jwt_framework
 {
-    interface isendenvelope
+    interface IEnvelope
     {
 
-        EnvelopeDefinition sendenvelope();
+        string SendEnvelope();
     }
 }

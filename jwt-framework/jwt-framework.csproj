@@ -290,7 +290,7 @@
     <Compile Include="AuthTokens.cs" />
     <Compile Include="JwtEnvelope.cs" />
     <Compile Include="Envelope.cs" />
-    <Compile Include="ISendEnvelope.cs" />
+    <Compile Include="IEnvelope.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

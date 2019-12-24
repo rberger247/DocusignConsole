@@ -26,6 +26,25 @@ namespace eg_01_csharp_jwt
         public SendEnvelope(ApiClient apiClient) : base(apiClient)
         {
         }
+
+
+
+        public string sendenvelope()
+        {
+            string response = string.Empty;
+            List<IEnvelope> envelopes = new List<IEnvelope>();
+            ApiEnvelope apiEnvelope = new ApiEnvelope(ApiClient);
+            JwtEnvelope jwtEnvelope = new JwtEnvelope(ApiClient);
+            envelopes.Add(apiEnvelope);
+            envelopes.Add(jwtEnvelope);
+            foreach (var env in envelopes)
+            {
+              response =   env.SendEnvelope();
+               
+            }
+            return response;
+        }
+
         /// <summary>
         ///
         /// </summary>
