@@ -23,12 +23,12 @@ namespace eg_01_csharp_jwt
         {
         }
 
-        public string SendEnvelope()
+        public string SendEnvelope(EnvelopeDefinition envDef)
         {
 
             CheckToken();
-            Envelopes sendEnvelopes = new Envelopes(ApiClient);
-            var envDef = sendEnvelopes.CreateEvelope();
+            //Envelopes sendEnvelopes = new Envelopes(ApiClient);
+            //var envDef = sendEnvelopes.CreateEvelope();
             EnvelopesApi envelopeApi = new EnvelopesApi(ApiClient.Configuration);
             var results = envelopeApi.CreateEnvelope(AccountID, envDef).ToJson();
             return results;

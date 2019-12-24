@@ -72,13 +72,9 @@ namespace eg_01_csharp_jwt
             return envDef;
         }
 
-        public string SendEnvelope()
+        public string SendEnvelope(EnvelopeDefinition envDef)
         {
             string accountId = "9597916";
-            CheckToken();
-            Envelopes Envelopes = new Envelopes(ApiClient);
-            var envDef = Envelopes.CreateEvelope();
-            EnvelopesApi envelopeApi = new EnvelopesApi(ApiClient.Configuration);
             var envelopeJson = JsonConvert.SerializeObject(envDef);
 
             var request = new RestRequest("/resource/", Method.POST);

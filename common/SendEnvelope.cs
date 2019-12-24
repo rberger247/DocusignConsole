@@ -39,7 +39,11 @@ namespace eg_01_csharp_jwt
             envelopes.Add(jwtEnvelope);
             foreach (var env in envelopes)
             {
-              response =   env.SendEnvelope();
+               
+                Envelopes envelope = new Envelopes(ApiClient);
+                var envDef = envelope.CreateEvelope();          
+                //PrepareEnv()
+              response =   env.SendEnvelope(envDef);
                
             }
             return response;
